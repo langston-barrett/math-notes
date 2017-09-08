@@ -1,5 +1,7 @@
 # Math notes
 
+[![Build Status](https://travis-ci.org/siddharthist/math-notes.svg?branch=master)](https://travis-ci.org/siddharthist/math-notes)
+
 These are notes from classes and textbooks that I have actually proofread, and so feel comfortable putting online.
 
 The goal is to automatically compile them with Travis and upload PDF versions to

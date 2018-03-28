@@ -1,4 +1,5 @@
 *.pdf
+*.otf
 result
 
 ## Core latex/pdflatex auxiliary files:

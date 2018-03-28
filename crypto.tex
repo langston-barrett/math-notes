@@ -1,0 +1,38 @@
+\documentclass[a5paper]{article}
+
+\input{header.tex}
+
+\begin{document}
+
+\title{Cryptography}
+\author{Langston Barrett}
+\date{Fall 2017}
+\maketitle
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+\begin{itemize}
+  \item Instructor: Adam Groce
+  \item Textbook:
+    \begin{itemize}
+      \item Title: Introduction to Modern Cryptography, 2\textsuperscript{nd} Edition
+      \item Author: Jonathan Katz and Yehuda Lindell
+      \item ISBN: 978-1-4665-7026-9
+    \end{itemize}
+\end{itemize}
+
+\begin{note}
+  \begin{field}
+    What's wrong with having a small key space $\caK$?
+  \end{field}
+
+  \begin{field}
+    It makes your scheme vulnerable to brute-force attacks, especially when the
+    distribution on the message space $\caM$ is well-understood (as in all
+    adversarial experiments).
+  \end{field}
+\end{note}
+
+\end{document}

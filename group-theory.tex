@@ -1,16 +1,6 @@
 \documentclass[a5paper]{article}
 
-\input{./tex-preamble/anki.tex}
-\input{./tex-preamble/amsthm.tex}
-\input{./tex-preamble/general.tex}
-\input{./tex-preamble/math.tex}
-
-\geometry{
-  lmargin=1.5cm,
-  rmargin=1.5cm,
-  tmargin=2cm,
-  bmargin=2cm
-}
+\input{header.tex}
 
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
@@ -438,13 +428,12 @@ associativity, commutativty, etc.]
 
 \begin{theorem}[Homomorphisms and Presentations]
   If
-  \begin{enumerate}%[label=\Alph*.]
-    % \itemsep0em
+  \begin{premises}
     \item $(G,\star)$ is a finite group or order $n$ with presentation,
     \item $S=\braces{s_1,\ldots,s_m}$ is its set of generators,
     \item $H$ is another group with $r_1,\ldots,r_m\in H$,
     \item every relation satisfied in $G$ by $s_i$ is satisfied in $H$ by $r_i$,
-  \end{enumerate}
+  \end{premises}
   then
   \begin{conclusion}
     there is a unique homomorphism $f:G\to H$ which maps $s_i$ to $r_i$. If $H$
@@ -1200,11 +1189,11 @@ Another intro to cosets:
 
 \begin{theorem}[Second Isomorphism Theorem]
   If
-  \begin{enumerate}%[label=\Alph*.]
+  \begin{premises}
     \item $A,B,G$ are groups,
     \item $A,B$ are subgroups of $G$,
     \item $A$ is a subgroup of $N_G(B)$,
-  \end{enumerate}
+  \end{premises}
   then
   \begin{conclusion}
     $B\trianglelefteq AB$, $A\cap B\trianglelefteq A$, and

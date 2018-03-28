@@ -1,56 +1,147 @@
 %% math symbols, notation, etc
 \usepackage{amssymb}       % math characters
 \usepackage{mathtools}     % improvement on amsmath
-% \usepackage{unicode-math}  % use OTF math fonts
-\AtBeginDocument{\let\phi\varphi} % varphi with unicode-math
 
-% general stuff
-\newcommand{\units}[1]{\;\mathrm{#1}}
-\newcommand{\dd}{\,\mathrm{d}}
-\newcommand{\ov}{\overline}
-\newcommand{\paren}[1]{\left(#1\right)}
-\newcommand{\braces}[1]{\left\{#1\right\}}
-\newcommand{\brackets}[1]{\left[#1\right]}
-\newcommand{\ceiling}[1]{\left\lceil{} #1 \right\rceil}
-\newcommand{\floor}[1]{\left\lfloor{} #1 \right\rfloor}
-\newcommand{\abs}[1]{\left| #1 \right|}
-\newcommand{\e}[1]{\cdot 10^{#1}}
-% \newcommand{\emf}{\mathcal{E}}
-\newcommand{\contradiction}{\Rightarrow\Leftarrow}
-\newcommand{\inv}[1]{\frac{1}{#1}}
-\newcommand{\tif}{\text{ if }}
-\newcommand{\totherwise}{\text{ otherwise }}
-% \newcommand{\mydef}{\textbf{Definition:}}
-% complex numbers
-\renewcommand{\Im}{\operatorname{Im}}
-\renewcommand{\Re}{\operatorname{Re}}
-% sets
-\newcommand{\zn}{\mathbb{Z}_n}
-\newcommand{\zp}{\mathbb{Z}_p}
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Q}{\mathbb{Q}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\C}{\mathbb{C}}
-% \C is a command (needs to be renewed) on XeLaTeX
+\usepackage{unicode-math}         % use OTF math fonts
+\setoperatorfont\mathup % operators should be set in math font
+% \AtBeginDocument{\let\setminus\minus}
+
+% \ExplSyntaxOn % fix xmapsto. https://github.com/wspr/unicode-math/issues/197
+% \RenewDocumentCommand \xmapsto { m } {
+%   \mathrel {
+%     \exp_after:wN \Uoverdelimiter \cs:w sym \__um_symfont_tl \cs_end: "21A6 {
+%       \mkern 5mu \scan_stop: #1 \mkern 5mu \scan_stop:
+%     }
+%   }
+% }
+% \ExplSyntaxOff
+
+% Tex Gyre Schola Math -  unpretentious, serif (good for \mathbb)
+% Latin Modern Math -  update of Computer Modern, a little thicker (good for \mathcal)
+% Asana Math -  the only font with the correct \setminus
+% \setmathfont{Latin Modern Math}
+\setmathfont{Tex Gyre Pagella Math}
+\setmathfont[range=\mathcal]{Latin Modern Math}
+% \setmathfont[range=\mathcal]{Tex Gyre Schola Math}
+% \setmathfont[range=\mathbb]{Tex Gyre Schola Math}
+% \setmathfont[range=\setminus]{Asana Math}
+
+% A good, casual math font:
+% \usepackage{mathpazo}
+
+% alternative characters
+\let\epsilon\varepsilon
+\let\phi\varphi
+\let\oldemptyset\emptyset{}
+\let\emptyset\varnothing{}
+
+% paired delimiters
+\DeclarePairedDelimiterX{\Abs}[1]{\lvert}{\rvert}{#1}
+\DeclarePairedDelimiterX{\Angle}[1]{\langle}{\rangle}{#1}
+\DeclarePairedDelimiterX{\Braces}[1]{\{}{\}}{#1}
+\DeclarePairedDelimiterX{\Brackets}[1]{[}{]}{#1}
+\DeclarePairedDelimiterX{\Ceiling}[1]{\lceil}{\rceil}{#1}
+\DeclarePairedDelimiterX{\Floor}[1]{\lfloor}{\rfloor}{#1}
+\DeclarePairedDelimiterX{\Norm}[1]{\lVert}{\rVert}{#1}
+\DeclarePairedDelimiterX{\Paren}[1]{\lparen}{\rparen}{#1}
+
+% swap the starred and unstarred versions of paired delimiters
+\makeatletter % https://goo.gl/osSmHV
+\def\abs{\@ifstar{\Abs}{\Abs*}}
+\def\angles{\@ifstar{\Angle}{\Angle*}}
+\def\braces{\@ifstar{\Braces}{\Braces*}}
+\def\brackets{\@ifstar{\Brackets}{\Brackets*}}
+\def\ceiling{\@ifstar{\Ceiling}{\Ceiling*}}
+\def\floor{\@ifstar{\Floor}{\Floor*}}
+\def\norm{\@ifstar{\Norm}{\Norm*}}
+\def\paren{\@ifstar{\Paren}{\Paren*}}
+\makeatother
 
 % operators/functions
+% \DeclareMathOperator{\Im}{Im}        % complex numbers: real part
+% \DeclareMathOperator{\Re}{Re}        % complex numbers: imaginary part
+\DeclareMathOperator{\Var}{Var}         % statistics: variance
 \DeclareMathOperator{\ord}{ord}
-% \DeclareMathOperator{\image}{image}
-\DeclareMathOperator{\Int}{Int}
-\DeclareMathOperator{\Ext}{Ext}
-\DeclareMathOperator{\Lim}{Lim}
-\DeclareMathOperator{\Bd}{Bd}
-\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\image}{image}     % general: image
+\DeclareMathOperator{\id}{id}           % general: identity function
+\DeclareMathOperator{\lcm}{lcm}         % general: least common multiple
+\DeclareMathOperator{\xor}{xor}         % general: exclusive or
+\DeclareMathOperator{\Int}{Int}         % topology: interior
+\DeclareMathOperator{\Ext}{Ext}         % topology: exterior
+\DeclareMathOperator{\Bd}{Bd}           % topology: boundary
+\DeclareMathOperator{\oball}{B}         % topology: open ball
+\DeclareMathOperator{\cball}{\ov{B}}    % topology: closed ball
+\DeclareMathOperator{\sphere}{S}        % topology: sphere
 \DeclareMathOperator{\proj}{proj}
-\DeclareMathOperator{\xor}{xor}
-\DeclareMathOperator{\spanf}{span}
-\DeclareMathOperator{\id}{id}
-% linear
-\DeclareMathOperator{\col}{Col}
-\DeclareMathOperator{\row}{Row}
-\DeclareMathOperator{\nul}{Nul}
-\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\spanf}{span}      % linear: span
+\DeclareMathOperator{\col}{Col}         % linear: column space
+\DeclareMathOperator{\row}{Row}         % linear: row space
+\DeclareMathOperator{\nul}{Nul}         % linear: null space
+\DeclareMathOperator{\rank}{rank}       % linear: rank
+\DeclareMathOperator{\determinant}{det} % linear: determinant
+\DeclareMathOperator{\Alt}{Alt}         % linear: alternating group/square
+\DeclareMathOperator{\Sym}{Sym}         % linear: symmetric square
+\DeclareMathOperator{\Tr}{Trace}        % linear: trace of a matrix
+\DeclareMathOperator{\divergence}{div}  % multi: divergence
+\DeclareMathOperator{\curl}{curl}       % multi: curl
+\DeclareMathOperator{\characteristic}{char} % algebra: ring/field characteristic
+\DeclareMathOperator{\ann}{ann}         % algebra: the annihilator of a submodule
+\DeclareMathOperator{\GL}{GL}           % algebra: general linear group
+\DeclareMathOperator{\SL}{SL}           % algebra: special linear group
+\DeclareMathOperator{\GF}{GF}           % algebra: galois field
+\DeclareMathOperator{\Tor}{Tor}         % algebra: torsion elements/functor
+\DeclareMathOperator{\Stab}{Stab}       % algebra: stabilizer
+\DeclareMathOperator{\Orb}{Orb}         % algebra: orbit
+\DeclareMathOperator{\Mat}{Mat}         % algebra: matrix ring
+\DeclareMathOperator{\Res}{Res}         % algebra: restriction of a representation
+\DeclareMathOperator{\Ind}{Ind}         % algebra: induced representation
+\DeclareMathOperator{\im}{im}           % algebra: image
+\DeclareMathOperator{\Aut}{Aut}         % algebra/cat: automorphisms
+\DeclareMathOperator{\End}{End}         % algebra/cat: endomorphisms
+
+\newcommand{\DeclareCategory}[2]{\DeclareMathOperator{#1}{\mathbf{#2}}}
+\DeclareMathOperator{\Obj}{Obj}   % categories: objects of a category
+\DeclareMathOperator{\Hom}{Hom}   % categories: hom-sets
+\DeclareCategory{\Set}{Set}       % categories: (small) sets
+\DeclareCategory{\FinSet}{FinSet} % categories: finite sets
+\DeclareCategory{\Cat}{Cat}       % categories: small categories
+\DeclareCategory{\Grpd}{Grpd}     % categories: small groupoids
+\DeclareCategory{\Mon}{Mon}       % categories: monoids
+\DeclareCategory{\Grp}{Grp}       % categories: groups
+\DeclareCategory{\AbGrp}{AbGrp}   % categories: abelian groups
+\DeclareCategory{\Top}{Top}       % categories: topological spaces
+\DeclareCategory{\Man}{Man}       % categories: topological manifolds
+\DeclareCategory{\Mod}{-Mod}      % categories: modules over a ring
+\DeclareCategory{\Met}{Metric}    % categories: metric spaces
+\DeclareCategory{\Vect}{Vect}     % categories: vector spaces
+\DeclareCategory{\dVect}{-Vect}   % categories: vector spaces (with dash)
+\DeclareCategory{\Rep}{Rep}       % categories: representations
+\DeclareCategory{\Alg}{-Alg}      % categories: functor algebras
+\DeclareCategory{\Coalg}{\kern-1pt-Coalg} % categories: functor algebras
+\DeclareCategory{\omegacat}{ω} % categories: functor algebras
+
+% make letters in different fonts (bold, blackboard, caligraphic, fraktur)
+% https://tex.stackexchange.com/questions/156196/newcommand-with-variable-name
+\newcommand{\mkltr}[1]{%
+    \expandafter\newcommand\csname bf#1\endcsname{\ensuremath{\mathbf #1}}
+    \expandafter\newcommand\csname bb#1\endcsname{\ensuremath{\mathbb #1}}
+    \expandafter\newcommand\csname ca#1\endcsname{\ensuremath{\mathcal #1}}
+    \expandafter\newcommand\csname fr#1\endcsname{\ensuremath{\mathfrak #1}}
+}%
+\mkltr A \mkltr B \mkltr C \mkltr D \mkltr E \mkltr F \mkltr G \mkltr H
+\mkltr I \mkltr J \mkltr K \mkltr L \mkltr M \mkltr N \mkltr O \mkltr P
+\mkltr Q \mkltr R \mkltr S \mkltr T \mkltr U \mkltr V \mkltr W \mkltr X
+\mkltr Y \mkltr Z
+
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
+\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+
+% general stuff
+\newcommand{\units}[1]{\;\text{#1}}
+\newcommand{\ov}{\overline}
 
 % set theory
 \newcommand{\xlongmapsto}[1]{\xmapsto{\,\,\, #1\,\,\,}}
@@ -61,66 +152,30 @@
 \newcommand{\powerset}{\mathcal{P}}
 
 % analysis & calculus
-\usepackage{esint} % \oiint, etc
+\usepackage{esint}                   % \oiint, etc
+\newcommand{\dd}{\,\mathrm{d}}       % differential operator (Leibniz notation)
 \newcommand{\evalat}[2]{{\bigg|_{#1}^{#2}}}
-\newcommand{\ext}[1]{{#1}^{ext}}  % extension of function
-\DeclareMathOperator{\determinant}{det}
-\DeclareMathOperator{\oball}{B}
-\DeclareMathOperator{\cball}{\ov{B}}
-\DeclareMathOperator{\sphere}{S}
-\DeclareMathOperator{\divergence}{div}
-\DeclareMathOperator{\curl}{curl}
+\newcommand{\ext}[1]{{#1}^{ext}}     % extension of function
 
 % vectors
 \newcommand{\ihat}{\hat{\imath}}
 \newcommand{\jhat}{\hat{\jmath}}
 \newcommand{\khat}{\hat{k}}
 \newcommand{\lvec}[1]{\overrightarrow{#1}}
-\newcommand{\len}[1]{\left\| #1 \right\|}
 
 % topology
 \newcommand{\RP}{\ensuremath{\R\hspace{-0.07em}\mathrm{P}}}
 
-% categories
-\newcommand{\Cat}{\ensuremath{\mathcal{C}\mathrm{at}}}
-\newcommand{\ComGrp}{\ensuremath{\mathcal{C}\mathrm{om}\mathcal{G}\mathrm{rp}}}
-\newcommand{\AbGrp}{\ensuremath{\mathcal{A}\mathrm{b}\mathcal{G}\mathrm{rp}}}
-\newcommand{\Grp}{\ensuremath{\mathcal{G}\mathrm{rp}}}
-\newcommand{\Mod}{\ensuremath{\mathcal{M}\mathrm{od}}}
-\newcommand{\Man}{\ensuremath{\mathcal{M}\mathrm{an}}}
-\newcommand{\Metric}{\ensuremath{\mathcal{M}\mathrm{etric}}}
-\newcommand{\Set}{\ensuremath{\mathcal{S}\mathrm{et}}}
-\newcommand{\Top}{\ensuremath{\mathcal{T}\!\mathrm{op}}}
-\newcommand{\homoTop}{\ensuremath{\mathrm{homo}\mathcal{T}\mathrm{op}}}
-\newcommand{\Vect}{\ensuremath{\mathcal{V}\mathrm{ect}}}
-\renewcommand{\phi}{\varphi}
-
-% number theory
-\newcommand{\modulus}[1]{\; \left(\mathrm{mod}\; #1\right)}
-\newcommand{\crash}[2]{\left(\frac{#1}{#2}\right)}
-\newcommand{\QED}{\begin{flushright}QED\end{flushright}}
-
 % algebra
 \newcommand{\quotient}[2]{{\raisebox{.2em}{$#1$}\left/\raisebox{-.2em}{$#2$}\right.}}
-\newcommand{\GL}{\mathrm{GL}}     % general linear group
-\newcommand{\SL}{\mathrm{SL}}     % special linear group
-\DeclareMathOperator{\ann}{ann}   % the annihilator of a submodule
-\DeclareMathOperator{\Hom}{Hom}   % homomorphisms between modules
-\DeclareMathOperator{\Mor}{Mor}   % categorical morphisms
-\DeclareMathOperator{\characteristic}{char} % ring characteristic
-\DeclareMathOperator{\Tor}{Tor}   % torsion elements
-\DeclareMathOperator{\Stab}{Stab} % stabilizer
-\DeclareMathOperator{\Orb}{Orb}   % orbit
-\DeclareMathOperator{\Aut}{Aut}   % automorphisms
-\DeclareMathOperator{\Inn}{Inn}   % inner automorphisms
-\DeclareMathOperator{\End}{End}   % endomorphisms
-\DeclareMathOperator{\Mat}{Mat}   % matrix ring
-\DeclareMathOperator{\Tr}{Trace}  % trace of a matrix
-\DeclareMathOperator{\im}{im}     % image
+\renewcommand{\S}{\mathfrak{S}}   % symmetric group
+\newcommand{\ab}{\mathbf{ab}}     % algebra: abelianization
+\newcommand{\op}{\mathsf{op}}     % algebra: opposite
 
 % statistics
-\DeclareMathOperator{\Var}{Var}
-
-% nicer empty set
-\let\oldemptyset\emptyset{}
-\let\emptyset\varnothing{}
+% https://tex.stackexchange.com/questions/229023/expectation-operator#229029
+% expectation and covariance
+\DeclareMathOperator{\ExpOp}{Exp}
+\DeclareMathOperator{\CovOp}{Cov}
+\newcommand{\Exp}{\ExpOp\brackets*}
+\newcommand{\Cov}{\CovOp\brackets*}

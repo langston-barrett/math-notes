@@ -2,15 +2,25 @@
 
 \usepackage{amsthm}
 
-\theoremstyle{theorem}
-\newtheorem{theorem}{Theorem}[subsection]
+\newtheoremstyle{mine} % name
+  {7pt} % space above
+  {5pt} % space below
+  {} % body font
+  {} % indent amount
+  {\bfseries} % theorem head font
+  {.} % punctuation after theorem head
+  {.5em} % space after theorem head
+  {} % theorem head spec (can be left empty, meaning no)
+
+\theoremstyle{mine} % these are the non-italicized
+\newtheorem{theorem}{Theorem}[section]
 \newtheorem*{theorem*}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem*{lemma*}{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem*{proposition*}{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem*{corollary*}{Corollary}
-
-\theoremstyle{definition} % these are the non-italicized
 \newtheorem{eqenv}[theorem]{Equation}
 \newtheorem*{eqenv*}{Equation}
 \newtheorem{remark}[theorem]{Remark}

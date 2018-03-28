@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs ? import ./pinned-pkgs.nix { } }:
 
 # let
   # amsthm_to_anki = with pkgs; stdenv.mkDerivation {
@@ -25,7 +25,7 @@ with pkgs; stdenv.mkDerivation {
   name = "math-notes";
   version = "0.1.0";
 
-  src = if lib.inNixShell then null else ./.;
+  src = if lib.inNixShell then null else lib.sourceFilesBySuffices ./. [ ".tex" ];
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
@@ -42,7 +42,9 @@ with pkgs; stdenv.mkDerivation {
 
   buildInputs = [
     # amsthm_to_anki
-    noto-fonts
+    noto-fonts                   # latex text font
+    latinmodern-math             # latex math font
+    tex-gyre-pagella-math        # latex math font
     texlive.combined.scheme-full # lualatex, etc.
   ];
 }

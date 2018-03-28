@@ -1,6 +1,8 @@
 \documentclass[a5paper]{article}
 
 \input{header.tex}
+\input{./tex-preamble/logic.tex}
+\input{./tex-preamble/crypto.tex}
 
 \begin{document}
 
@@ -34,5 +36,36 @@
     adversarial experiments).
   \end{field}
 \end{note}
+
+\begin{note}
+  \begin{field}
+    What are the four kinds of security experiments?
+  \end{field}
+
+  \begin{field}
+    \begin{enumerate}%[label=\Alph*.]
+      \itemsep0em
+      \item Ciphertext-only
+      \item Known-plaintext
+      \item Chosen-plaintext
+      \item Chosen-ciphertext
+    \end{enumerate}
+  \end{field}
+\end{note}
+
+\begin{definition}[Private-key (symmetric) encryption scheme]
+  A \define{private-key encryption scheme} consists of:
+  \begin{itemize}
+    \itemsep0em
+    \item a \define{message space} $\caM$,
+    \item a \define{key space} $\caK$, and
+    \item a trio of algorithms $(\Gen,\Enc,\Dec)$.
+  \end{itemize}
+  A scheme is \define{correct} if
+  \begin{equation*}
+    \apply{\Dec_k}{(\apply{\Enc_k}{m})}=m
+  \end{equation*}
+  for all $m\in\caM$ and $k\in\caK$.
+\end{definition}
 
 \end{document}

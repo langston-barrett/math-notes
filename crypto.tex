@@ -68,4 +68,27 @@
   for all $m\in\caM$ and $k\in\caK$.
 \end{definition}
 
+\section{Probability}
+\label{sec:probability}
+
+\begin{lemma}
+  If
+  \begin{premises}
+    \item $A$ and $B$ are random variables,
+    \item $B$ is sampled from some finite set of outcomes $\caB$,
+  \end{premises}
+  then
+  \begin{conclusion}
+    \begin{equation*}
+      \Pr\paren{A}=\sum_{b\in \caB}\Pr\paren{A|B}\cdot\Pr\paren{B=b}
+    \end{equation*}
+  \end{conclusion}
+\end{lemma}
+
+\begin{theorem}[Bayes' Theorem]
+  \begin{equation*}
+    \Pr(A|B) = \frac{\Pr(B|A)\cdot \Pr A}{\Pr B}
+  \end{equation*}
+\end{theorem}
+
 \end{document}

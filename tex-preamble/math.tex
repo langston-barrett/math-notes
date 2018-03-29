@@ -2,8 +2,8 @@
 \usepackage{amssymb}       % math characters
 \usepackage{mathtools}     % improvement on amsmath
 
-\usepackage{unicode-math}         % use OTF math fonts
-\setoperatorfont\mathup % operators should be set in math font
+% \usepackage{unicode-math}         % use OTF math fonts
+% \setoperatorfont\mathup % operators should be set in math font
 % \AtBeginDocument{\let\setminus\minus}
 
 % \ExplSyntaxOn % fix xmapsto. https://github.com/wspr/unicode-math/issues/197
@@ -20,11 +20,8 @@
 % Latin Modern Math -  update of Computer Modern, a little thicker (good for \mathcal)
 % Asana Math -  the only font with the correct \setminus
 % \setmathfont{Latin Modern Math}
-\setmathfont{Tex Gyre Pagella Math}
-\setmathfont[range=\mathcal]{Latin Modern Math}
-% \setmathfont[range=\mathcal]{Tex Gyre Schola Math}
-% \setmathfont[range=\mathbb]{Tex Gyre Schola Math}
-% \setmathfont[range=\setminus]{Asana Math}
+% \setmathfont{Tex Gyre Pagella Math}
+% \setmathfont[range=\mathcal]{Latin Modern Math}
 
 % A good, casual math font:
 % \usepackage{mathpazo}
@@ -96,6 +93,8 @@
 \DeclareMathOperator{\Res}{Res}         % algebra: restriction of a representation
 \DeclareMathOperator{\Ind}{Ind}         % algebra: induced representation
 \DeclareMathOperator{\im}{im}           % algebra: image
+\DeclareMathOperator{\Inn}{Inn}         % algebra: inner automorphisms
+\DeclareMathOperator{\Out}{Out}         % algebra: outer automorphisms
 \DeclareMathOperator{\Aut}{Aut}         % algebra/cat: automorphisms
 \DeclareMathOperator{\End}{End}         % algebra/cat: endomorphisms
 
@@ -152,7 +151,7 @@
 \newcommand{\powerset}{\mathcal{P}}
 
 % analysis & calculus
-\usepackage{esint}                   % \oiint, etc
+% \usepackage{esint}                   % \oiint, etc
 \newcommand{\dd}{\,\mathrm{d}}       % differential operator (Leibniz notation)
 \newcommand{\evalat}[2]{{\bigg|_{#1}^{#2}}}
 \newcommand{\ext}[1]{{#1}^{ext}}     % extension of function

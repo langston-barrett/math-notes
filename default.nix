@@ -27,24 +27,42 @@ with pkgs; stdenv.mkDerivation {
 
   src = if lib.inNixShell then null else lib.sourceFilesBySuffices ./. [ ".tex" ];
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
-  buildPhase = ''
-    for texfile in crypto.tex group-theory.tex; do
-      latexmk -lualatex "$texfile"
-    done
-  '';
+  # https://github.com/NixOS/nixpkgs/issues/24485
+  FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [
+      lmodern noto-fonts
+      latinmodern-math tex-gyre-pagella-math
+    ];
+  };
 
   installPhase = ''
     mkdir -p "$out"
-    cp *.pdf $out
+    cp *.pdf "$out"
+  '';
+
+  buildPhase = ''
+    mkdir -p TMP && export TEXMFCACHE=$PWD/TMP
+    for texfile in crypto.tex group-theory.tex; do
+      lualatex "$texfile"
+    done
   '';
 
   buildInputs = [
     # amsthm_to_anki
-    noto-fonts                   # latex text font
-    latinmodern-math             # latex math font
-    tex-gyre-pagella-math        # latex math font
-    texlive.combined.scheme-full # lualatex, etc.
+    # noto-fonts                   # latex text font
+    # latinmodern-math             # latex math font
+    # tex-gyre-pagella-math        # latex math font
+    (texlive.combine {
+      inherit (texlive)
+      # Core
+      scheme-basic euenc fontspec luatex lualibs luaotfload # luatex-def
+      # General
+      enumitem etoolbox filehook float hyperref ucharcat
+      # Math
+      amsmath lualatex-math mathtools unicode-math
+      # Graphics
+      pgf tikz-cd relsize xcolor;
+    })
+    # texlive.combined.scheme-full # lualatex, etc.
   ];
 }

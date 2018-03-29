@@ -25,6 +25,39 @@
     \end{itemize}
 \end{itemize}
 
+\section{Probability}
+\label{sec:probability}
+
+\begin{lemma}
+  If
+  \begin{premises}
+    \item $A$ and $B$ are random variables,
+    \item $B$ is sampled from some finite set of outcomes $\caB$,
+  \end{premises}
+  then
+  \begin{conclusion}
+    \begin{equation*}
+      \Pr\paren{A}=\sum_{b\in \caB}\Pr\paren{A|B}\cdot\Pr\paren{B=b}
+    \end{equation*}
+  \end{conclusion}
+\end{lemma}
+
+\begin{lemma}[Union Bound]
+  For events $E_0,\ldots,E_n$,
+  \begin{equation*}
+    \Pr\paren{\bigvee_{i=0}^n E_i} \leq \sum_{i=0}^n\Pr E_i
+  \end{equation*}
+\end{lemma}
+
+\begin{theorem}[Bayes' Theorem]
+  \begin{equation*}
+    \Pr(A|B) = \frac{\Pr(B|A)\cdot \Pr A}{\Pr B}
+  \end{equation*}
+\end{theorem}
+
+\section{Concepts}
+\label{sec:concepts}
+
 \begin{note}
   \begin{field}
     What's wrong with having a small key space $\caK$?
@@ -53,7 +86,10 @@
   \end{field}
 \end{note}
 
-\begin{definition}[Private-key (symmetric) encryption scheme]
+\section{Symmetric-key cryptography}
+\label{sec:symmetric}
+
+\begin{definition*}[Private-key (symmetric) encryption scheme]
   A \define{private-key encryption scheme} consists of:
   \begin{itemize}
     \itemsep0em
@@ -66,29 +102,70 @@
     \apply{\Dec_k}{(\apply{\Enc_k}{m})}=m
   \end{equation*}
   for all $m\in\caM$ and $k\in\caK$.
+\end{definition*}
+
+\begin{definition*}[Perfect secrecy]
+  A private-key encryption scheme $\Pi=(\Gen,\Enc,\Dec)$ is \define{perfectly
+  secret} if for all distributions on $\caM$, $m\in\caM$, and $c\in\caC$
+  (with $\Pr(C=c)>0$),
+  \begin{equation*}
+    \Pr(M=m|C=c)=\Pr(M=m)
+  \end{equation*}
+  Equivalently, for all $m,m'\in\caM$, and $c\in\caC$,
+a
+  \begin{equation*}
+    \Pr(\Enc_K(m)=c)=\Pr(\Enc_K(m')=c)
+  \end{equation*}
+\end{definition*}
+
+\begin{definition*}[$\mathsf{PrivK}^{\mathsf{eav}}_{\caA,\Pi}$]
+  \
+  \begin{enumerate}%[label=\Alph*.]
+    \itemsep0em
+    \item The adversary $\caA$ outputs $m_0,m_1\in\caM$.
+    \item
+      \begin{enumerate}%[label=\Alph*.]
+        \itemsep0em
+        \item A key $k\leftarrow\Gen(1^n)$ is generated.
+        \item A bit $b\leftarrow \braces{0,1}$ is chosen.
+        \item A ciphertext $c\leftarrow\apply{\Enc_k}{m_b}$ is fed to $\caA$.
+      \end{enumerate}
+    \item $\caA$ outputs $b'\in\braces{0,1}$.
+  \end{enumerate}
+  The experiment outputs $1$ when $b=b'$.
+\end{definition*}
+
+\begin{definition*}[Perfect indistinguishability in the presence of an eavesdropper]
+	A scheme $\Pi$ has \define{perfectly indistinguishable encryptions in the
+  presence of an eavesdropper} if
+  \begin{equation*}
+    \Pr\paren{\mathsf{PrivK}^{\mathsf{eav}}_{\caA,\Pi}=1}=\frac 12
+  \end{equation*}
+  for all $\caA\in\mathsf{BPT}$.
+\end{definition*}
+
+\subsection{Peseudorandomness}
+\label{subsec:pseudorandomness}
+
+\begin{definition}
+	A \textit{determinisitic} algorithm $G\in\mathsf{P}$ is a \define{pseudorandom
+  generator} if there exists some real polynomial $l$ such that
+  $D:\braces{0,1}^n\to\braces{0,1}^{\apply{l}{n}}$ and the following conditions hold:
+  \begin{enumerate}%[label=\Alph*.]
+    \itemsep0em
+    \item \define{Expansion:} For all $n\in\N$, $\apply{l}{n}>n$.
+    \item \define{Pseudorandomness:} For all distinguishers $D\in\mathsf{BPT}$,
+      there exists a negligible function $\negl$ such that
+      \begin{equation*}
+        \abs{\Pr(D(r)=1)-\Pr(D(G(s))=1)}\leq \apply{\negl}{n}
+      \end{equation*}
+      where the first probability is taken over the choice of a uniformly random
+      string $r\leftarrow\braces{0,1}^{l(n)}$ and the second over a choice of a
+      uniformly random $s\leftarrow\braces{0,1}^n$, and both over randomness of
+      $D$. 
+  \end{enumerate}
 \end{definition}
 
-\section{Probability}
-\label{sec:probability}
 
-\begin{lemma}
-  If
-  \begin{premises}
-    \item $A$ and $B$ are random variables,
-    \item $B$ is sampled from some finite set of outcomes $\caB$,
-  \end{premises}
-  then
-  \begin{conclusion}
-    \begin{equation*}
-      \Pr\paren{A}=\sum_{b\in \caB}\Pr\paren{A|B}\cdot\Pr\paren{B=b}
-    \end{equation*}
-  \end{conclusion}
-\end{lemma}
-
-\begin{theorem}[Bayes' Theorem]
-  \begin{equation*}
-    \Pr(A|B) = \frac{\Pr(B|A)\cdot \Pr A}{\Pr B}
-  \end{equation*}
-\end{theorem}
 
 \end{document}

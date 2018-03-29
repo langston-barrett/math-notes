@@ -10,7 +10,17 @@
   {\bfseries} % theorem head font
   {.} % punctuation after theorem head
   {.5em} % space after theorem head
-  {} % theorem head spec (can be left empty, meaning no)
+  {} % theorem head spec
+
+\newtheoremstyle{def} % name
+  {7pt} % space above
+  {5pt} % space below
+  {} % body font
+  {} % indent amount
+  {\bfseries} % theorem head font
+  {.} % punctuation after theorem head
+  {.5em} % space after theorem head
+  {\thmname{#1}\thmnumber{ #2}} % theorem head spec
 
 \theoremstyle{mine} % these are the non-italicized
 \newtheorem{theorem}{Theorem}[section]
@@ -21,6 +31,7 @@
 \newtheorem*{proposition*}{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem*{corollary*}{Corollary}
+\theoremstyle{def} % these are the non-italicized
 \newtheorem{eqenv}[theorem]{Equation}
 \newtheorem*{eqenv*}{Equation}
 \newtheorem{remark}[theorem]{Remark}

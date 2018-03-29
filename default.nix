@@ -49,9 +49,9 @@ with pkgs; stdenv.mkDerivation {
 
   buildInputs = [
     # amsthm_to_anki
-    # noto-fonts                   # latex text font
-    # latinmodern-math             # latex math font
-    # tex-gyre-pagella-math        # latex math font
+    noto-fonts                   # latex text font
+    latinmodern-math             # latex math font
+    tex-gyre-pagella-math        # latex math font
     (texlive.combine {
       inherit (texlive)
       # Core
@@ -63,6 +63,5 @@ with pkgs; stdenv.mkDerivation {
       # Graphics
       pgf tikz-cd relsize xcolor;
     })
-    # texlive.combined.scheme-full # lualatex, etc.
   ];
 }

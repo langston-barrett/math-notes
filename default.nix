@@ -38,6 +38,7 @@ with pkgs; stdenv.mkDerivation {
   installPhase = ''
     mkdir -p "$out"
     cp *.pdf "$out"
+    cp *.md "$out"
   '';
 
   buildPhase = ''

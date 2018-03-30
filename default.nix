@@ -37,8 +37,10 @@ with pkgs; stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p "$out"
-    cp *.pdf "$out"
-    cp *.md "$out"
+    for file in *.pdf *.md; do
+      echo "Copying ${file}..."
+      cp "$file" "$out"
+    done
   '';
 
   buildPhase = ''

@@ -86,6 +86,48 @@
   \end{field}
 \end{note}
 
+\begin{note}
+  \begin{field}
+    How does a reduction work?
+  \end{field}
+
+  \begin{field}
+    In it's most general form, reduction is a tool used to show that
+    problem/language $A$ is just as ``hard'' as problem/language $B$.
+    \begin{enumerate}%[label=\Alph*.]
+      \itemsep0em
+      \item Assume that problem $B$ ``hard''.
+      \item Assume $\caA$ is an algorithm that solves $A$.
+      \item Using $\caA$ as a subroutine, construct a solution $\caB$ for $B$.
+      \item This contradicts the assumption that $B$ couldn't be solved,
+        conclude by contradiction that no such $\caA$ exists.
+    \end{enumerate}
+  \end{field}
+\end{note}
+
+\begin{note}
+  \begin{field}
+    What is one piece of information that almost every encryption scheme leaks?
+    Why might it be a problem? When can and when can't it be solved?
+  \end{field}
+
+  \begin{field}
+    Plaintext length. It might be a problem if
+    $\caM=\braces{\text{``yes''},\text{``no''}}$. It can be solved when the
+    maximum length of the encrypted messages is known in advance.
+  \end{field}
+\end{note}
+
+\begin{note}
+  \begin{field}
+    Why is it necessary to use randomness in encryption?
+  \end{field}
+
+  \begin{field}
+    No non-random scheme has indistinguishability for multiple encryptions.
+  \end{field}
+\end{note}
+
 \section{Symmetric-key cryptography}
 \label{sec:symmetric}
 
@@ -119,7 +161,8 @@ a
 \end{definition*}
 
 \begin{definition*}[$\mathsf{PrivK}^{\mathsf{eav}}_{\caA,\Pi}$]
-  \
+  The \define{perfect adversarial indistinguishability experiment
+  $\mathsf{PrivK}^{\mathsf{eav}}_{\caA,\Pi}$} is:
   \begin{enumerate}%[label=\Alph*.]
     \itemsep0em
     \item The adversary $\caA$ outputs $m_0,m_1\in\caM$.
@@ -144,6 +187,56 @@ a
   for all $\caA\in\mathsf{BPT}$.
 \end{definition*}
 
+\begin{definition*}[$\mathsf{PrivK}^{\mathsf{eav}}_{\caA,\Pi}(n)$]
+  The \define{adversarial indistinguishability experiment
+  $\mathsf{PrivK}^{\mathsf{eav}}_{\caA,\Pi}(n)$} is:
+  \begin{enumerate}%[label=\Alph*.]
+    \itemsep0em
+    \item The adversary $\caA$ is given $1^n$ and outputs $m_0,m_1\in\caM$ with
+      $|m_0|=|m_1|$.
+    \item
+      \begin{enumerate}%[label=\Alph*.]
+        \itemsep0em
+        \item A key $k\leftarrow\Gen(1^n)$ is generated.
+        \item A bit $b\leftarrow \braces{0,1}$ is chosen.
+        \item A ciphertext $c\leftarrow\apply{\Enc_k}{m_b}$ is fed to $\caA$.
+      \end{enumerate}
+    \item $\caA$ outputs $b'\in\braces{0,1}$.
+  \end{enumerate}
+  The experiment outputs $1$ when $b=b'$.
+\end{definition*}
+
+\begin{definition*}[Indistinguishability in the presence of an eavesdropper]
+	A scheme $\Pi$ has \define{indistinguishable encryptions in the presence of an
+  eavesdropper} if
+  \begin{equation*}
+    \Pr\paren{\mathsf{PrivK}^{\mathsf{eav}}_{\caA,\Pi}=1}\leq \frac 12 + \apply{\negl}{n}
+  \end{equation*}
+  for all $\caA\in\mathsf{BPT}$ and $n\in\N$, where the probability is taken
+  over randomness of $\caA$ and that of the experiment.
+\end{definition*}
+
+\begin{definition*}[$\mathsf{PrivK}^{\mathsf{mult}}_{\caA,\Pi}(n)$]
+  The \define{multiple-message indistinguishability experiment
+  $\mathsf{PrivK}^{\mathsf{mult}}_{\caA,\Pi}(n)$} is:
+  \begin{enumerate}%[label=\Alph*.]
+    \itemsep0em
+    \item The adversary $\caA$ is given $1^n$ and outputs lists
+      $(m_{0,0},m_{1,0},\ldots,m_{t,0})$ and $(m_{0,1},m_{1,1},\ldots,m_{t,1})$
+      such that $|m_{i,0}|=|m_{i,1}|$ for all $i\in\braces{1,\ldots,t}$.
+    \item
+      \begin{enumerate}%[label=\Alph*.]
+        \itemsep0em
+        \item A key $k\leftarrow\Gen(1^n)$ is generated.
+        \item A bit $b\leftarrow \braces{0,1}$ is chosen.
+        \item The ciphertexts $(\apply{\Enc_k}{m_{0,b}},\ldots,\apply{\Enc_k}{m_{t,b}})$
+          are given to $\caA$.
+      \end{enumerate}
+    \item $\caA$ outputs $b'\in\braces{0,1}$.
+  \end{enumerate}
+  The experiment outputs $1$ when $b=b'$.
+\end{definition*}
+
 \subsection{Peseudorandomness}
 \label{subsec:pseudorandomness}
 
@@ -166,6 +259,62 @@ a
   \end{enumerate}
 \end{definition}
 
+\begin{note}
+  \begin{field}
+    What is meant by the phrase ``let $s$ be a random string''?
+  \end{field}
 
+  \begin{field}
+    Strictly speaking, this phrase doesn't make sense. A given string (or
+    function) can't be \textit{random}. What it means is ``let $s$ be a string
+    drawn uniformly at random from the set of all strings''.
+  \end{field}
+\end{note}
+
+\begin{note}
+  \begin{field}
+    Does the seed of a pseudorandom generator need to be kept secret? Why?
+  \end{field}
+
+  \begin{field}
+    Yes. Consider the modified one-time pad scheme where a PRG is used to expand
+    the key length. If the adversary knows the seed, they know the key.
+  \end{field}
+\end{note}
+
+\begin{definition}
+	A \define{stream cipher} is a pair of deterministic algorithms $(\Init,\GetBits)$
+  where 
+  \begin{itemize}
+    \itemsep0em
+    \item $\Init$ takes as input a seed $s$ and an optional initialization
+      vector IV, and outputs an initial state $s_0$.
+    \item $\GetBits$ takes a state $s_i$ and outputs a bit $b$ and an updated
+      state $s_{i+1}$.
+  \end{itemize}
+\end{definition}
+
+\subsection{CPA-security}
+\label{subsec:cpa-security}
+
+\begin{definition*}[$\mathsf{PrivK}^{\mathsf{cpa}}_{\caA,\Pi}(n)$]
+  The \define{CPA indistinguishability experiment
+  $\mathsf{PrivK}^{\mathsf{cpa}}_{\caA,\Pi}(n)$} is:
+  \begin{enumerate}%[label=\Alph*.]
+    \itemsep0em
+    \item A key $k\leftarrow\Gen(1^n)$ is generated.
+    \item The adversary $\caA$ is given $1^n$ and access to the oracle
+      $\Enc_k(-)$. The adversary outputs $m_0,m_1\in\caM$ with $|m_0|=|m_1|$.
+    \item
+      \begin{enumerate}%[label=\Alph*.]
+        \itemsep0em
+        \item A bit $b\leftarrow \braces{0,1}$ is chosen.
+        \item The ciphertext $c\leftarrow\apply{\Enc_k}{m_b}$ is fed to $\caA$.
+      \end{enumerate}
+    \item $\caA$ continues to have access to $\Enc_k(-)$ and outputs
+      $b'\in\braces{0,1}$.
+  \end{enumerate}
+  The experiment outputs $1$ when $b=b'$.
+\end{definition*}
 
 \end{document}

@@ -1,9 +1,13 @@
 % New environments. Syntax: \newenvironment{beforecommands}{aftercommands}
 % environment for notecards. Portable accross tex files
 \newenvironment{card}{\begin{framed}\begin{minipage}[t][3in][t]{5in}\noindent}{\end{minipage}\end{framed}}
-\newenvironment{note}{\paragraph{Note:}}{}
+
+% Notes
+\newtheorem{noteenv}[theorem]{Note}
+\newtheorem*{noteenv*}{Note}
+\newenvironment{note}{\begin{noteenv*}}{\end{noteenv*}}
 
 % for the Anki notecard style
-\newenvironment{field}{}{}
+\newenvironment{field}{\noindent}{}
 \newenvironment{conclusion}{}{}
 \newenvironment{premises}{\begin{enumerate}[label=\alph*.]}{\end{enumerate}}

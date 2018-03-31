@@ -5,6 +5,11 @@
 \newcommand{\pk}{\ensuremath{\mathrm{pk}}} % public key
 \newcommand{\sk}{\ensuremath{\mathrm{sk}}} % secret key
 
+% Without unicode-math:
+\makeatletter
+\def\operator@font{\sf}
+\makeatother
+
 \DeclareMathOperator{\gen}{Gen}
 \DeclareMathOperator{\enc}{Enc}
 \DeclareMathOperator{\dec}{Dec}
@@ -12,6 +17,12 @@
 \DeclareMathOperator{\Enc}{Enc}
 \DeclareMathOperator{\Dec}{Dec}
 \DeclareMathOperator{\negl}{negl}
+
+% MACs
 \DeclareMathOperator{\mac}{MAC}
 \DeclareMathOperator{\verify}{Verify}
 \DeclareMathOperator{\sign}{Sign}
+
+% Stream ciphers
+\DeclareMathOperator{\Init}{Init}
+\DeclareMathOperator{\GetBits}{GetBits}

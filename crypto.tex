@@ -184,7 +184,7 @@ a
   \begin{equation*}
     \Pr\paren{\mathsf{PrivK}^{\mathsf{eav}}_{\caA,\Pi}=1}=\frac 12
   \end{equation*}
-  for all $\caA\in\mathsf{BPT}$.
+  for all $\caA\in\mathsf{PP}$.
 \end{definition*}
 
 \begin{definition*}[$\mathsf{PrivK}^{\mathsf{eav}}_{\caA,\Pi}(n)$]
@@ -212,7 +212,7 @@ a
   \begin{equation*}
     \Pr\paren{\mathsf{PrivK}^{\mathsf{eav}}_{\caA,\Pi}=1}\leq \frac 12 + \apply{\negl}{n}
   \end{equation*}
-  for all $\caA\in\mathsf{BPT}$ and $n\in\N$, where the probability is taken
+  for all $\caA\in\mathsf{PP}$ and $n\in\N$, where the probability is taken
   over randomness of $\caA$ and that of the experiment.
 \end{definition*}
 
@@ -247,7 +247,7 @@ a
   \begin{enumerate}%[label=\Alph*.]
     \itemsep0em
     \item \define{Expansion:} For all $n\in\N$, $\apply{l}{n}>n$.
-    \item \define{Pseudorandomness:} For all distinguishers $D\in\mathsf{BPT}$,
+    \item \define{Pseudorandomness:} For all distinguishers $D\in\mathsf{PP}$,
       there exists a negligible function $\negl$ such that
       \begin{equation*}
         \abs{\Pr(D(r)=1)-\Pr(D(G(s))=1)}\leq \apply{\negl}{n}
@@ -316,5 +316,25 @@ a
   \end{enumerate}
   The experiment outputs $1$ when $b=b'$.
 \end{definition*}
+
+\subsection{Message authentication codes}
+\label{subsec:macs}
+
+\begin{definition}[Message authentication code]
+	A \define{message authentication code} consists of three
+  $\mathsf{PP}$ algorithms $(\Gen,\Mac,\Verify)$ such that:
+  \begin{itemize}
+    \itemsep0em
+    \item $\Gen$ takes input $1^n$ and outputs a key $k$ with $|k|\geq n$,
+    \item $\Mac$ takes a key $k\in\caK$ and a message $m\in\caM$ and outputs
+      a tag $t$.
+    \item $\Verify$ takes a key $k\in\caK$, a message $m\in\caM$, and a tag $t$,
+      and outputs a bit $b$ with $b=1$ meaning valid and $b=0$ meaning invalid.
+  \end{itemize}
+  A MAC is correct if for all $m\in\caM$ and $k\in\caK$,
+  \begin{equation*}
+    \apply{\Verify_k}{(\apply{\Mac_k}{m})} = 1
+  \end{equation*}
+\end{definition}
 
 \end{document}

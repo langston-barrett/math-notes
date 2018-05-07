@@ -147,6 +147,15 @@ The presentation of the following examples owes a lot to \cite{riehl}.
     \item There is a category $\bf1$ with one object and only the identity
       arrow, called the \define{unit} or (foreshadowing
       \cref{sec:limits-and-colimits}) \define{terminal} category.
+    \item For a topological space $X$, the category $PX$ of paths on $X$ has as
+    objects the points of $X$ and for $x,y\in X$, $\Hom_{PX}(x,y)$ is the set of
+    paths (continuous functions $[0,1]\to X$) from $x$ to $y$. Composition of
+    paths $p,q$ is written $p+q$. There is a zero path $0_x$ ($t\mapsto x$)
+    which serves as the identity.
+    \item The fundamental groupoid $\Pi(X)$ of a space $(X,\tau)$ is the
+      category with points of $X$ as objects and equivalence classes under
+      homotopy (rel endpoints) of paths from $x\in X$ to $y\in X$ as morphisms
+      $\Hom_{\Pi(X)}(x,y)$. Composition is given by path concatenation.
   \end{itemize}
 \end{example}
 
@@ -161,6 +170,28 @@ than particular examples. To this end, let $\bfC$ denote an arbitrary category.
 \end{definition}
 
 Just as with functions, inverses (should they exist) are unique.
+
+\begin{definition*}[Groupoid]\label[definition]{def:groupoid}
+	A groupoid is a category in which every morphism is an isomorphism.
+\end{definition*}
+
+\begin{example*}
+	If the connected components of $(X,\tau)$ consist of single points, then
+  \begin{equation*}
+    \Hom_{\Pi(X)}(x,y) = \begin{cases}
+      \emptyset &\text{ if }x\neq y \\
+      \braces{\id_x} &\text{ if }x=y
+    \end{cases}
+  \end{equation*}
+  A groupoid with this property is called discrete.
+
+  For any convex subset $X$ of a normed vector space $V$, the straight line
+  homotopy gives an equivalence between all paths in $PX(x,y)$. Therefore,
+  $\Hom_{\Pi(X)}(x,y)$ has exactly one object for all $x,y\in X$. A groupoid
+  with this property is called 1-connected and a tree groupoid. If $\Pi(X)$ is a
+  tree groupoid, then $X$ is path-connected. If every path-component of $X$ is
+  1-connected, then $X$ is simply connected.
+\end{example*}
 
 \begin{figure}[ht]
   \centering
@@ -179,6 +210,17 @@ Just as with functions, inverses (should they exist) are unique.
     inverses not shown.
   }
 \end{figure}
+
+\begin{definition}[Full subcategory, wide subcategory]
+	A subcategory $D$ of $C$ is full if for all objects $x,y$ of $D$,
+  $\Hom_D(x,y)=\Hom_C(x,y)$. A subcategory is called wide if $\Obj(D)=\Obj(C)$.
+\end{definition}
+
+\begin{example}
+	Full subcategories of $\Top$ include Hausdorff spaces, metrizable spaces, and
+  compact spaces. Wide subcategories of $\Top$ include those with only open
+  maps, only closed maps, or only isomorphisms.
+\end{example}
 
 \begin{definition}\label[definition]{def:commutative-diagram}
   A commutative diagram is a way to visualize equations between arrows
@@ -209,6 +251,28 @@ Just as with functions, inverses (should they exist) are unique.
     \end{tikzcd}
   \end{center}
 \end{example}
+
+\begin{definition}
+  A morphism $f:X\to Y$ is 
+  \begin{itemize}
+    \item a \define{monomorphism} is left-cancellable, i.e.\ for every 
+      $h,k:W\to X$, $f\circ h=f\circ k$ implies $h=k$, and
+    \item an \define{epimorphism} is right-cancellable, i.e.\ for every 
+      $h,k:Y\to Z$, $h\circ f=k\circ h$ implies $h=k$.
+  \end{itemize}
+  If $X\xrightarrow{f}Y\xrightarrow{g}X$ are such that $g\circ f =\id_X$, then
+  $g$ is a \define{retraction} of $f$ and $f$ is a \define{section} of $g$.
+  In this case, $f$ is a monomorphism, $g$ is an epimorphism, and they are both
+  called \define{split}.
+\end{definition}
+
+\begin{lemma}
+  \dual{
+    The composition of monics is monic. If $g\circ f$ is monic, so is $f$.
+  }{
+    The composition of epis is epic. If $g\circ f$ is epic, so is $g$.
+  }
+\end{lemma}
 
 \begin{definition*}
 	For an object $A$ of a category $\bfC$, we define the endomorphisms of $A$ to
@@ -285,6 +349,11 @@ using the following notation:
   identity on objects and morphisms. The composition of functors is associative,
   and there is a category $\Cat$ of ``small'' categories (it doesn't include
   itself, for instance).
+\end{example}
+
+\begin{example}\label[example]{ex:fundamental-groupoid}
+  Since continuous maps preserve paths, homotopy classes, and composition, the
+  fundamental groupoid $\Pi$ defines a functor $\Top\to\Grpd$.
 \end{example}
 
 \begin{example}\label[example]{ex:diagonal}
@@ -365,7 +434,9 @@ their images under $F:\bfC\to\bfD$ do in $\bfD$:
 \end{center}
 Note however that it is possible that $FA=FB=FC$, as in a functor to a category
 with a single object. However, the equalties between composites still hold.
-One consequence is that functors preserve isomorphism.
+One consequence is that functors preserve isomorphisms, sections, and
+retractions (Emily Riehl calls this ``arguably the first lemma of category
+theory'' \cite[pp.\ 18]{riehl}).
 
 \begin{remark*}[A note on invariants]
   Functors were first defined in the context of algebraic topology. Emmy Noether
@@ -1096,6 +1167,86 @@ These concepts can be defined more elegantly using functors
 Generally, one often says $\bfC$ ``has $x$'' for some object $x$ and
 collection of arrows defined by a universal property, e.g.\
 ``$\bfC$ has (binary) products'' or ``$\bfC$ has internal homs''.
+
+\section{The Yoneda lemma}
+\label{sec:yoneda}
+
+\begin{definition}
+  A \define{contravariant functor}\index{Functor!Contravariant}
+  from $\bfC$ to $\bfD$ is a functor $\bfC^{\op}\to \bfD$.
+\end{definition}
+
+The following diagram is due to Riehl \cite{riehl}, and demonstrates the
+differences between co- and contravariant functors:
+\vspace{1em}
+
+\begin{center}
+\begin{minipage}[b]{0.48\linewidth}
+  \centering
+  \begin{tikzcd}
+    \bfC \arrow[rr,"F"] & {} & \bfD \\
+    X \arrow[dd, "f"] & \mapsto & FX \arrow[dd,"Ff"]\\
+    {} & \mapsto & {} \\
+    Y & \mapsto & FY 
+  \end{tikzcd}
+\end{minipage}
+\begin{minipage}[b]{0.48\linewidth}
+  \centering
+  \begin{tikzcd}
+    \bfC^{\op} \arrow[rr,"F"] & {} & \bfD \\
+    X \arrow[dd, "f"] & \mapsto & FX \\
+    {} & \mapsto & {} \\
+    Y & \mapsto & FY \arrow[uu,"Ff", swap]
+  \end{tikzcd}
+\end{minipage}
+\end{center}
+
+\begin{definition}
+  The covariant and contravariant \define{functors represented by $X$}
+  are
+  \begin{align*}
+    \Hom(X,-):\bfC\to\Set
+    &&
+    \Hom(-,X):\bfC^{\op}\to\Set
+  \end{align*}
+  given by
+  \begin{center}
+  \begin{minipage}[b]{0.48\linewidth}
+    \centering
+    \begin{tikzcd}
+      \bfC \arrow[rr,"\Hom(X\comma -)"] & {} & \bfD \\
+      Y \arrow[dd, "f"] & \mapsto & \Hom(X,Y) \arrow[dd,"f\circ -"]\\
+      {} & \mapsto & {} \\
+      Z & \mapsto & \Hom(X,Z) 
+    \end{tikzcd}
+  \end{minipage}
+  \begin{minipage}[b]{0.48\linewidth}
+    \centering
+    \begin{tikzcd}
+      \bfC^{\op} \arrow[rr,"\Hom(-\comma X)"] & {} & \bfD \\
+      Y \arrow[dd, "f"] & \mapsto & \Hom(Y,X)\\
+      {} & \mapsto & {} \\
+      Z & \mapsto & \Hom(Z,X)  \arrow[uu,swap,"-\circ f"]
+    \end{tikzcd}
+  \end{minipage}
+  \end{center}
+  In fact, these extend to a bifunctor (if $\bfC$ is locally small),
+  \begin{align*}
+    \Hom(-,-):C^{\op}\times C &\longrightarrow \Set \\
+    (X,Y) &\longmapsto_0 \Hom(X,Y) \\
+    (f,g) &\longmapsto_1 (g\circ -\circ f)
+  \end{align*}
+\end{definition}
+
+For objects $W,X,Y,Z$ and morphisms $f:X\to Y$ and $g:Y\to Z$, post-composition
+by $g$ and pre-composition by $f$ define natural transformations:
+\begin{center}
+  \begin{tikzcd}
+    \Hom(X,Y) \arrow[r, "g\circ -"] \arrow[d,"-\circ f"] & 
+      \Hom(X,Z) \arrow[d, "-\circ f"] \\
+    \Hom(W,Y) \arrow[r,"g\circ -"] & \Hom(W,Z)
+  \end{tikzcd}
+\end{center}
 
 \section{Functor algebras}
 \label{sec:functors-and-their-algebras}

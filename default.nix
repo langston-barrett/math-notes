@@ -60,7 +60,7 @@ with pkgs; stdenv.mkDerivation {
       # Core
       scheme-basic euenc fontspec luatex lualibs luaotfload # luatex-def
       # General
-      enumitem etoolbox filehook float hyperref ucharcat
+      cleveref enumitem etoolbox filehook float hyperref ucharcat
       # Math
       amsmath lualatex-math mathtools unicode-math
       # Graphics

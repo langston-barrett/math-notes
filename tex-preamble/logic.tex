@@ -16,7 +16,8 @@
 \newcommand{\appppply}[5]{#1\apspace #2 \apspace #3 \apspace #4 \apspace #5}
 
 % LC
-\newcommand{\lam}[2]{\uplambda #1.\apspace#2}                % λ-abstraction
+\newcommand{\lam}[2]{\lambda #1.\apspace#2}                % λ-abstraction
+% \newcommand{\lam}[2]{\uplambda #1.\apspace#2}                % λ-abstraction
 \DeclareRobustCommand\longtwoheadrightarrow
      {\relbar\joinrel\twoheadrightarrow}
 \newcommand{\betato}{\overset{\upbeta}
@@ -34,7 +35,7 @@
 \newcommand{\valid}[1]{\judgment{valid}{#1}}
 
 % Names of formal systems
-\newcommand{\formalsystem}[1]{\textbf{#1}\indeX{#1@\textbf{#1}}}
+\newcommand{\formalsystem}[1]{\textbf{#1}}
 \newcommand{\HoTT}[0]{\formalsystem{HoTT}}  % homotopy type theory
 \newcommand{\LC}[0]{\formalsystem{LC}}      % λ-calculus
 \newcommand{\STLC}[0]{\formalsystem{STLC}}  % simply-typed λ-calculus

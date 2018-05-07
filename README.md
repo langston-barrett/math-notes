@@ -9,8 +9,9 @@ attribute their content to me.
 They are automatically compiled with [Travis CI](http://travis-ci.org/)
 and are available for download:
 
- * [Group theory](https://siddharthist.github.io/math-notes/group-theory.pdf)
+ * [Category theory](https://siddharthist.github.io/math-notes/category-theory.pdf)
  * [Cryptography](https://siddharthist.github.io/math-notes/crypto.pdf)
+ * [Group theory](https://siddharthist.github.io/math-notes/group-theory.pdf)
 
 Eventually, I'd like to automatically create and upload Anki flashcards with my
 program [amsthm-to-anki](https://github.com/siddharthist/amsthm-to-anki/).

@@ -6,8 +6,6 @@
 \input{./tex-preamble/hott.tex}
 \input{./tex-preamble/unicode.tex}
 
-\usepackage{cleveref}
-
 \usepackage{tikz}
 \usetikzlibrary{cd,arrows.meta}
 \tikzcdset{
@@ -33,6 +31,12 @@
 \newcommand{\UniMath}{\software{UniMath}}
 \newcommand{\Coq}{\software{Coq}}
 \newcommand{\postcomp}{\ensuremath{\ttfun{postcomp}}}
+
+\usepackage[noabbrev, capitalize]{cleveref}
+\crefname{notation}{Notation}{Notations}
+\Crefname{notation}{Notation}{Notations}
+\crefname{rule}{Rule}{Rule}
+\Crefname{rule}{Rule}{Rule}
 
 \begin{document}
 
@@ -115,6 +119,8 @@ The presentation of the following examples owes a lot to \cite{riehl}.
       \define{subcategory} of $\Grp$).
     \item $F\dVect$: The category of vector spaces\index{Vector space} over a
       field $F$ with linear transformations as morphisms.
+    \item $\Rep_G^F$: The category of (finite-dimensional) representations
+      $(V,\rho)$ of a group $G$ over $F$ with equivariant maps as morphisms. 
   \end{itemize}
 \end{example}
 
@@ -204,6 +210,45 @@ Just as with functions, inverses (should they exist) are unique.
   \end{center}
 \end{example}
 
+\begin{definition*}
+	For an object $A$ of a category $\bfC$, we define the endomorphisms of $A$ to
+  be
+  \begin{equation*}
+    \End_{\bfC}(A) \coloneqq \Hom_{\bfC}(A,A)
+  \end{equation*}
+\end{definition*}
+
+\begin{definition*}
+	For an object $A$ of a category $\bfC$, we define the automorphisms of $A$ to
+  be
+  \begin{equation*}
+    \Aut_{\bfC}(A) \coloneqq \braces{f\in \End_{\bfC}(A)|f\text{ is an isomorphism}}
+  \end{equation*}
+\end{definition*}
+
+\begin{remark*}
+  The endomorphisms of an object $A$ form a monoid under composition where the
+  identity is $\id_A$. The automorphisms of $A$ are a submonoid of the
+  endomorphisms, and they form a group where the inverse of an element is given
+  by the assumption that each element is an isomorphism.
+  Thus, we may refer to the endomorphism monoid or automorphism group of an
+  object.\footnote{Following the above remarks on groups-as-categories, we might
+    even call these the endomorphism or automorphism category, though this
+    description is less useful because it is less precise.}
+\end{remark*}
+
+\begin{example*}
+  Just as with categories and functors, endomorphisms and automorphisms generalize
+  common patterns:
+  \begin{itemize}
+    \itemsep-0.2em
+    \item $\Aut_{\Set}(A)=\S_A$, the symmetric group on $A$.
+    \item $\Aut_{F\dVect}(V)=\GL(V)$, the general linear group.
+    \item In $\Top$, the category of topological spaces, the automorphism group
+      is the homeomorphism group.
+  \end{itemize}
+\end{example*}
+
 \subsection{Functors}
 \label{subsec:functors}
 
@@ -259,7 +304,24 @@ using the following notation:
   generally denoted $U$, which takes sets with some structure to their
   underlying sets and homomorphisms to the corresponding maps of sets. For
   instance, there is a forgetful functor $U:\Grp\to\Set$.
+
+  More generally, if $\bfC$ is like $\bfD$ but with ``more structure'' (for
+  instance, spaces with a group action, rather than just spaces), then there is
+  a forgetful functor $\bfC\to\bfD$. For example, there is a forgetful functor
+  $\Rep_G^F\to F\dVect$.
 \end{example}
+
+\begin{example*}
+	For many of these ``algebraic categories'', there is a \textbf{free functor}
+  from $\Set$ which assigns each set to the free object on that set. For
+  instance, there is a free group functor $\Set\to\Grp$ and a free
+  $F$-vector space functor $\Set\to F\dVect$.
+
+  Just as a group $(G,\circ,e)$ can be seen as a category $\underline{G}$ with a
+  single object, a $G$-action can be seen as a functor. A permutation
+  representation is a functor $\underline{G}\to\Set$, whereas a linear
+  representation is a functor $\underline{G}\to F\dVect$.
+\end{example*}
 
 \begin{example}\label[example]{ex:coproduct-functoriality}
 	If $\bfC$ has binary coproducts, then
@@ -305,16 +367,87 @@ Note however that it is possible that $FA=FB=FC$, as in a functor to a category
 with a single object. However, the equalties between composites still hold.
 One consequence is that functors preserve isomorphism.
 
+\begin{remark*}[A note on invariants]
+  Functors were first defined in the context of algebraic topology. Emmy Noether
+  discovered that Betti numbers (an important invariant of topological spaces)
+  were the ranks of certain free abelian groups associated with those spaces. 
+  Modern homology and homotopy theory grew out of the realization
+  that not only did spaces have these isomorphism-invariant groups associated to
+  them, but the continuous maps between such spaces \textit{induced group
+  homomorphisms} between them.
+
+  The most useful invariants in topology were those that gave a ``picture'' of
+  topological spaces \textit{and their morphisms} in better-understood categories.
+  Category theory expresses the fundamental nature of such invariants as
+  functors, and enables the abstract study of their properties.
+\end{remark*}
+
 \subsection{Natural transformations}
+
+\begin{definition*}
+	A \textbf{natural transformation} $\alpha$ between two functors
+  $F,G:\bfC\to\bfD$ is a collection $\braces{\alpha_A:FA\to GA}_{A\in \Obj\bfC}$
+  of morphisms in $\bfD$ indexed by the objects of $\bfC$, called the
+  \textbf{components} of $\alpha$, subject to the requirement that the following
+  diagram commutes for each $A,B\in\Obj \bfC$ and $f\in\Hom_{\bfC}(A,B)$:
+  \begin{center}
+    \begin{tikzcd}[sep=large]
+      F A \arrow[r, "F f"] \arrow[d, "\alpha_A"] & F B \arrow[d, "\alpha_B"] \\
+      G A \arrow[r, "G f"] & G B
+    \end{tikzcd}
+  \end{center}
+  \noindent We denote a natural transformation $\alpha$ from $F$ to $G$ by
+  $\alpha: F\Rightarrow G$. A natural transformation is a
+  \textbf{natural isomorphism} if each component is an isomorphism.
+\end{definition*}
+
+Natural transformations are intimidating at first. Luckily, it often suffices to
+reason about them componentwise (as in the definition of a natural isomorphism).
+
+Since functors preserve diagrams, the image of a functor $F:\bfC\to\bfD$ can be
+seen as a ``picture of shape $\bfC$ in $\bfD$''. A natural transformation, then
+is a map between such pictures \cite[pp.\ 16]{maclane}. Reusing the same
+commutative triangle as above,
+
+\begin{center}
+  \begin{tikzcd}[column sep=large]
+    FA\arrow[dr, "Ff"]\arrow[dd, "Fh"]\arrow[rr,"\alpha_A"] & {} & GA
+    \arrow[dr, "Gf"] \arrow[dd, near start, "G h", crossing over] & {} \\
+    {} & FB\arrow[dl, "Fg"]\arrow[rr,near start, "\alpha_B", crossing over] & {} & GB \arrow[dl, "Gg"]\\
+    FC \arrow[rr,"\alpha_C"]& {} & GC &  {}
+  \end{tikzcd}
+\end{center}
+
+\begin{definition*}
+	The componentwise composition of natural transformations is again a natural
+  transformation. To see this, just paste the two commutative squares together
+  along their border. This composition is associative, and there is an identity
+  natural transformation, and so we can form the \textbf{functor category} of
+  functors $\bfC\to\bfD$, denoted $\bfD^{\bfC}$.
+\end{definition*}
+
+\begin{example*}
+  The category of representations of $G$ can be seen as the functor category
+  $F\dVect^{\underline{G}}$. In this context, equivariant maps are exactly
+  natural transformations.
+
+  The abelianization of a group is functorial, and the projection of a group
+  onto its abelianization is a natural transformation from the identity functor
+  to $(-)^{\ab}$.
+
+  There is a canonical injective linear map from a vector space to its dual.
+  This map extends by composition to the double dual, and so defines a natural
+  transformation from the identity functor to $(-)^{**}$.
+\end{example*}
 
 \subsection{Duality}
 \label{subsec:duality}
 
-Consider a preorder $(A,≤)$ (that is, a set or type $A$ together with a
-reflexive, transitive relation $≤$). Its \define{opposite preorder} is
-$(A,≤^{\op})$ where
+Consider a preorder $(A,\leq)$ (that is, a set or type $A$ together with a
+reflexive, transitive relation $\leq$). Its \define{opposite preorder} is
+$(A,\leq^{\op})$ where
 \begin{equation*}
-	a ≤^{\op} b \Longleftrightarrow b ≤ a
+	a \leq^{\op} b \Longleftrightarrow b \leq a
 \end{equation*}
 Consider a group $(G,·,e)$. Its \define{opposite group} has the operation
 \begin{equation*}
@@ -644,7 +777,7 @@ generalizes: any (co)limits are unique up to specified isomorphism.
   \end{itemize}
 \end{example}
 
-\begin{definition}\label[definition]{def:pullback-and-pushout}
+\begin{definition}[Pullback and pushout]\label[definition]{def:pullback-and-pushout}
   \
   \vspace{-0.3em}\dual{
     For $A,B,C\in\Obj\bfC$ with arrows $f:A\to C$ and $g:B\to C$,
@@ -967,7 +1100,6 @@ collection of arrows defined by a universal property, e.g.\
 \section{Functor algebras}
 \label{sec:functors-and-their-algebras}
 
-
 \begin{definition}\label[definition]{def:endofunctor}
 	An \define{endofunctor}\index{Functor!Endofunctor} is a functor with identical
   domain and codomain.
@@ -1253,8 +1385,6 @@ family $\ttHom_{C}:C\to C\to \universe$ of arrows.
         }}}}
       \end{equation*}
   \end{enumerate} 
-  We denote the type $\appply{\ttHom}{a}{b}$ by $a\rightharpoonup b$ in an attempt
-  to distinguish it from the function type $a\to b$. 
   The type of all precategories is denoted $\Precat$.
 \end{definition}
 
@@ -1428,7 +1558,7 @@ property of the product.
     &\= (h,i)
   \end{align*}
   where the final equality is again due to function extensionality
-  and the η-rule for the function type (\cref{lemma:paths-dirprod-weq}).
+  and the η-rule for the function type.
 \end{proof}
 
 \begin{proof}[Proof of \cref{lemma:universe-binproducts}]

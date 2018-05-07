@@ -45,7 +45,8 @@ with pkgs; stdenv.mkDerivation {
 
   buildPhase = ''
     mkdir -p TMP && export TEXMFCACHE=$PWD/TMP
-    for texfile in crypto.tex group-theory.tex; do
+    for texfile in category-theory.tex crypto.tex group-theory.tex; do
+      # TODO: use latexmk to compile with citations, toc, etc
       lualatex "$texfile"
     done
   '';

@@ -577,6 +577,144 @@ typeset like so:
   Co-definition
 }
 
+\subsection{Equivalence}
+
+\subsection{Diagram chasing}
+
+See \cite[2.1]{simmons} and \cite[1.6]{riehl}. For a good example, see
+\cref{lemma:pullback-lemma}.
+
+Picture the following diagram:
+\begin{center}
+  \begin{tikzcd}[column sep=large]
+    \bullet \arrow[r, "f"] \arrow[dr, "g", swap] & \bullet \arrow[dr, "j"] \arrow[d, "h"]  &  \\
+    {} & \bullet \arrow[r, "k", swap] & \bullet
+  \end{tikzcd}
+\end{center}
+Suppose we know that the two triangles commute, that is
+\begin{align*}
+  h\circ f = g &&\text{and}&& k\circ h = j
+\end{align*}
+How can we tell that the outer square commutes? We \define{diagram chase},
+redrawing paths using established equalities:
+\begin{center}
+\begin{minipage}[b]{0.30\linewidth}
+  \centering
+  \begin{tikzcd}
+    \bullet \arrow[r, "f"] & \bullet \arrow[dr, "j"] &  \\
+    {} & \bullet & \bullet
+  \end{tikzcd}
+\end{minipage}
+\begin{minipage}[b]{0.30\linewidth}
+  \centering
+  \begin{tikzcd}
+    \bullet \arrow[r, "f"]  & \bullet \arrow[d, "h"]  &  \\
+    {} & \bullet \arrow[r, "k", swap] & \bullet
+  \end{tikzcd}
+\end{minipage}
+\begin{minipage}[b]{0.30\linewidth}
+  \centering
+  \begin{tikzcd}
+    \bullet \arrow[dr, "g", swap] & \bullet  &  \\
+    {} & \bullet \arrow[r, "k", swap] & \bullet
+  \end{tikzcd}
+\end{minipage}
+\end{center}
+We can write this argument just as easily with more standard algebraic
+\define{equational reasoning}:
+\begin{align*}
+  j\circ f
+  &= (k\circ h)\circ f \\
+  &= k\circ (h\circ f) \\
+  &= k\circ g
+\end{align*}
+
+\begin{lemma}
+  If $f$ is an isomorphism, then the commuting of the following diagrams is
+  equivalent: 
+  \begin{center}
+  \begin{minipage}[b]{0.49\linewidth}
+    \centering
+    \begin{tikzcd}
+      \bullet \arrow[d, "f", swap] \arrow[dr, "h"]& {} \\
+      \bullet \arrow[r, "g", swap] & \bullet 
+    \end{tikzcd}
+  \end{minipage}
+  \begin{minipage}[b]{0.49\linewidth}
+    \centering
+    \begin{tikzcd}
+      \bullet \arrow[dr, "h"]& {} \\
+      \bullet \arrow[u,"f^{-1}"]\arrow[r, "g", swap] & \bullet 
+    \end{tikzcd}
+  \end{minipage}
+  \end{center}
+\end{lemma}
+\begin{proof}[By equational reasoning]
+  ($\Rightarrow$) Precompose with $f^{-1}$:
+  \begin{align*}
+    g
+    &= g\circ \id \\
+    &= g\circ (f \circ f^{-1}) \\
+    &= (g\circ f) \circ f^{-1} \\
+    &= h \circ f^{-1}
+  \end{align*}
+
+  ($\Leftarrow$) Postcompose with $f$.
+\end{proof}
+\begin{proof}[By diagram chase]
+  ($\Rightarrow$) Consider the following diagram:
+  \begin{center}
+    \begin{tikzcd}
+      \bullet \arrow[r, "f^{-1}"] \arrow[dr, "g", swap]
+        & \bullet \arrow[r, "f"] \arrow[d, "h"]
+        & \bullet \arrow[dl, "g"] \\
+      {} & \bullet & {}
+    \end{tikzcd}
+  \end{center}
+  We want to show that $h\circ f^{-1}=g$, assuming $g\circ f=h$. Due to the
+  hypothesis and the definition of isomorphism, we know that the following
+  sequence of paths are equal:
+  \begin{center}
+  \begin{minipage}[b]{0.30\linewidth}
+    \centering
+    \begin{tikzcd}
+      \bullet \arrow[r, "f^{-1}"]
+        & \bullet \arrow[d, "h"]
+        & \bullet  \\
+      {} & \bullet & {}
+    \end{tikzcd}
+  \end{minipage}
+  \begin{minipage}[b]{0.30\linewidth}
+    \centering
+    \begin{tikzcd}
+      \bullet \arrow[r, "f^{-1}"]
+        & \bullet \arrow[r, "f"] 
+        & \bullet \arrow[dl, "g"] \\
+      {} & \bullet & {}
+    \end{tikzcd}
+  \end{minipage}
+  \begin{minipage}[b]{0.30\linewidth}
+    \centering
+    \begin{tikzcd}
+      \bullet
+        &
+        & \bullet \arrow[dl, "g"] \\
+      {} & \bullet & {}
+    \end{tikzcd}
+  \end{minipage}
+  \end{center}
+\end{proof}
+
+\begin{lemma}
+  \dual{
+    Composable sequences with common codomain and beginning at an initial object
+    are equal.
+  }{
+    Composable sequences with common domain and ending at a terminal object are
+    equal.
+  }
+\end{lemma}
+
 \section{Limits and colimits}
 \label{sec:limits-and-colimits}
 
@@ -1028,9 +1166,6 @@ are all instances of a general construction of \textit{limits} and
 definitions; these will help make sense of the terms ``candidate \_'' and
 ``candidate co\_'' used above.
 
-These concepts can be defined more elegantly using functors
-(\cref{def:functor}); here we consider only limits over graphs.
-
 \begin{definition}\label[definition]{def:graph-diagram}
 	A \define{graph}\index{Graph} $G$ consists of a (not necessarily finite)
   collection $G_0$ of vertices, and a map $G_1$ which assigns
@@ -1046,6 +1181,13 @@ These concepts can be defined more elegantly using functors
   $D_0:G_0\to \Obj\bfC$ and for each pair $(u,v)$ of vertices in $G_0$,
   a map $D_{1}^{(u,v)}:G_1(u,v)\to \Hom(\apply{D_0}{u},\apply{D}_0{v})$.
   When convenient, we drop the sub- and super-scripts.
+\end{definition}
+
+More elegantly,
+
+\begin{definition}
+  A \define{diagram}\index{Diagram} in $\bfC$ is a functor $F:\bfJ\to\bfC$ from
+  a small category.
 \end{definition}
 
 \begin{definition}[(Co)cones]\label[definition]{def:cone-cocone}
@@ -1717,6 +1859,20 @@ property of the product.
   equivalence in $\universe$, so by \cref{lemma:isbinproduct}, $\universe$ has
   binary products.
 \end{proof}
+
+\section{Topos theory}
+\label{sec:topos-theory}
+
+\begin{lemma}\label[lemma]{lemma:pullback-lemma}
+  Given a rectangle
+  \begin{center}
+    \begin{tikzcd}
+      A \arrow[d] \arrow[r] & B\arrow[d]\arrow[r] & C\arrow[d] \\
+      D \arrow[r] & E\arrow[r] & F \\
+    \end{tikzcd}
+  \end{center}
+  Then the outer rectangle is a pullback square if TODO
+\end{lemma}
 
 \nocite{*}
 \bibliographystyle{apalike}

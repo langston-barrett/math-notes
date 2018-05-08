@@ -59,7 +59,7 @@ with pkgs; stdenv.mkDerivation {
     (texlive.combine {
       inherit (texlive)
       # Core
-      scheme-basic euenc fontspec luatex lualibs luaotfload # luatex-def
+      scheme-basic euenc fontspec latexmk luatex lualibs luaotfload # luatex-def
       # General
       cleveref enumitem etoolbox filehook float hyperref ucharcat
       # Math

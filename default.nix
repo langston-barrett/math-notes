@@ -53,6 +53,7 @@ with pkgs; stdenv.mkDerivation {
 
   buildInputs = [
     # amsthm_to_anki
+    (aspellWithDicts (ps : [ ps.en ])) # spell checking for emacs
     noto-fonts                   # latex text font
     latinmodern-math             # latex math font
     tex-gyre-pagella-math        # latex math font

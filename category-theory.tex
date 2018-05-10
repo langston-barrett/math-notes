@@ -14,7 +14,7 @@
   >={stealth}
 }
 \tikzset{every path/.append style={line width=0.65pt}}
-\newcommand{\comma}{,}
+\newcommand*{\comma}{,}
 % transport diagrams, etc
 \usetikzlibrary{decorations}
 \usetikzlibrary{decorations.pathmorphing}
@@ -27,16 +27,19 @@
    \end{itemize}
 }
 
-\newcommand{\software}[1]{{\textsc{#1}}\index{#1}}
-\newcommand{\UniMath}{\software{UniMath}}
-\newcommand{\Coq}{\software{Coq}}
-\newcommand{\postcomp}{\ensuremath{\ttfun{postcomp}}}
+\newcommand*{\software}[1]{{\textsc{#1}}\index{#1}}
+\newcommand*{\UniMath}{\software{UniMath}}
+\newcommand*{\Coq}{\software{Coq}}
+\newcommand*{\postcomp}{\ensuremath{\ttfun{postcomp}}}
 
-\usepackage[noabbrev, capitalize]{cleveref}
+\usepackage[noabbrev, capitalize, nameinlink]{cleveref}
 \crefname{notation}{Notation}{Notations}
 \Crefname{notation}{Notation}{Notations}
-\crefname{rule}{Rule}{Rule}
-\Crefname{rule}{Rule}{Rule}
+
+\newcommand*{\linkto}[2]{\hyperref[#1]{#2~(\cref*{#1})}}
+\newcommand*{\linktoo}[2]{\hyperref[#1]{#2}}
+
+\renewcommand{\baselinestretch}{1.2} 
 
 \begin{document}
 
@@ -49,8 +52,15 @@
 \hrule
 \vspace{1em}
 
-\textbf{Caution!} A good deal of these notes were copied and pasted from my thesis, 
-typos and nonsequiters abound from the conversion process.
+\begin{remark*}
+  \textbf{Caution!} A good deal of these notes were copied and pasted from my
+  thesis, typos and nonsequiters abound from the conversion process.
+
+  These notes draw on many sources, comingling their observations freely. I hope
+  to provide more comprehensive coverage than any individual source on those
+  aspects of the theory that are especially tricky for me. See inline citations
+  and references.
+\end{remark*}
 
 Category theory provides a unifying language for much of modern math. It
 provides a ``zoomed out'' picture of a collection of structures, focusing not on
@@ -62,7 +72,7 @@ canonical example of a category is $\Set$, the collection of all sets. In
   which was included in \ZFC{} to avoid the
   paradoxes of Burali-Forti and Russell. The discovery of said paradoxes
   motivated Bertrand Russell to invent something he called the ``theory of
-  types''.}
+  types'' (see \cref{sec:type-theoretic-category-theory}).}
 
 \section{Basics}
 \label{sec:basics}
@@ -129,21 +139,17 @@ The presentation of the following examples owes a lot to \cite{riehl}.
   \begin{itemize}
     \itemsep-0.2em
     \item For any group $(G,\circ ,e)$, there is a corresponding category
-      $\underline{G}$ with a single object (denoted $∗$) and
-      $\Hom_{\underline{G}}(∗,∗)\coloneqq G$. Composition is given by the
+      $\underline{G}$ with a single object (denoted $*$) and
+      $\Hom_{\underline{G}}(*,*)\coloneqq G$. Composition is given by the
       group operation.
     \item For any set or type $A$, the \define{discrete category on $A$} has as
       objects the members or elements as $A$, and no other arrows except the
       requisite identities.
-    \item For any preorder $(A,≤)$ (a collection with a reflexive, transitive
-      binary relation), there is a category $\bfC(A)$ which has as objects the
+    \item For any preorder $(A,\leq)$ (a collection with a reflexive, transitive
+      binary relation), there is a category $\Pre(A)$ which has as objects the
       elements of $A$ and an arrow $a\to b$ just if $a≤b$.
       Conversely, any category with at most one arrow between any two objects
       defines a preorder.
-    \item The category $\ω$ is the preorder category $\bfC(\ℕ)$, that is,
-      it has as objects the natural numbers, and arrows
-      $n\to\apply{\suc}{n}$ (plus the requisite composites $n\to m$
-      where $n<m$).
     \item There is a category $\bf1$ with one object and only the identity
       arrow, called the \define{unit} or (foreshadowing
       \cref{sec:limits-and-colimits}) \define{terminal} category.
@@ -159,8 +165,20 @@ The presentation of the following examples owes a lot to \cite{riehl}.
   \end{itemize}
 \end{example}
 
-For the rest of the chapter, we deal only with categories in the abstract rather
-than particular examples. To this end, let $\bfC$ denote an arbitrary category.
+\begin{example}
+  These preorders are commonly viewed in the context of category theory:
+  \begin{itemize}
+    \itemsep-0.2em
+    \item The category $\ω$ is the preorder category $\Pre(\ℕ)$, that is,
+      it has as objects the natural numbers, and arrows
+      $n\to\apply{\suc}{n}$ (plus the requisite composites $n\to m$
+      where $n<m$).
+    \item For a topological space $(X,\tau)$, the category
+      $\operatorname{Open}(X)\coloneqq \Pre(\tau)$ is the preorder category
+      on the open subsets where $U\leq V$ iff $U\subseteq V$ (this preorder has
+      the rich structure of a Boolean algebra).
+  \end{itemize}
+\end{example}
 
 \begin{definition}[Isomorphism]\label[definition]{def:isomorphism}
 	An \define{isomorphism}\index{Isomorphism!In a category} is an arrow
@@ -356,9 +374,13 @@ using the following notation:
   fundamental groupoid $\Pi$ defines a functor $\Top\to\Grpd$.
 \end{example}
 
+\begin{definition}\label{def:product-cat}
+  There is a product in $\Cat$; the product $\bfC\times \bfD$ has as object
+  pairs of objects $(A,B)$ for $A\in\bfC$ and $B\in\bfD$ and similarly for
+  arrows.
+\end{definition}
+
 \begin{example}\label[example]{ex:diagonal}
-  There is a product in $\Cat$; the product $\bfC\times \bfD$ has as object pairs of
-  objects $(A,B)$ for $A\in\bfC$ and $B\in\bfD$ and similarly for arrows.
   For any category, there is a \define{diagonal functor}
   \begin{align*}
     \Delta:\bfC &\longrightarrow \bfC\times \bfC \\
@@ -409,7 +431,7 @@ using the following notation:
     \end{split}
   \end{align*}
   These two functors interact well, meaning in part that they extend to
-  a \define{bifunctor}
+  a \linkto{def:bifunctor}{bifunctor}
   \begin{align*}
     \begin{split}
       \bfC\times \bfC &\longrightarrow \bfC \\
@@ -419,6 +441,11 @@ using the following notation:
   \end{align*}
   where $(f+g)\circ \inl=f$ and $(f+g)\circ \inr=g$.
 \end{example}
+
+\begin{definition}\label[definition]{def:bifunctor}
+  A \define{bifunctor}\index{bifunctor} is a functor out of a binary product
+  category (see \cref{def:product-cat}).
+\end{definition}
 
 Since functors preserve sources, targets, and composition, they preserve
 commutative diagrams. If $f,g,h$ form a commutative triangle in $\bfC$, then
@@ -705,7 +732,7 @@ We can write this argument just as easily with more standard algebraic
   \end{center}
 \end{proof}
 
-\begin{lemma}
+\begin{lemma}\
   \dual{
     Composable sequences with common codomain and beginning at an initial object
     are equal.
@@ -722,6 +749,8 @@ Many constructions in categories are defined via a \textit{universal property}.
 Such characterizations abound in everyday mathematics, as the examples
 illustrate. All of the definitions to follow are examples of limits and colimits.
 Ultimately, M-types are constructed as limits.
+
+\subsection{Instances}
 
 \begin{definition}\label[definition]{def:terminal-and-initial}
   \
@@ -913,10 +942,7 @@ Ultimately, M-types are constructed as limits.
 	(Co)products are unique up to a specified isomorphism.
 \end{lemma}
 
-The proof is much the same as that for initial or terminal objects: the
-universal property of the (co)product produces arrows back and forth between the
-two (co)products, and their composites must be the identities. This lemma
-generalizes: any (co)limits are unique up to specified isomorphism.
+This lemma generalizes: any (co)limits are unique up to specified isomorphism.
 
 \begin{definition}\label[definition]{def:equalizer-and-coequalizer}
   Given objects $A,B\in\Obj\bfC$ and arrows $f,g:A\to B$,
@@ -1123,17 +1149,17 @@ generalizes: any (co)limits are unique up to specified isomorphism.
   \end{enumerate}
 \end{example}
 
-% \begin{example}\label[example]{ex:pullback-mon}
-%   In $\Mon$, the category of monoids, the kernel of $f:M\to N$
-%   can be represented as a pullback of the unique arrow $!:\braces{∗}\to N$ along
-%   $f$ as in the following diagram:
-%   \begin{center}
-%       \begin{tikzcd}[sep=large]
-%         \ker f \arrow[r, tail] \arrow[d, swap, "!"] & M \arrow[d, "f"] \\
-%         \braces{∗} \arrow[r, swap, "!"] & N
-%       \end{tikzcd}
-%   \end{center}
-% \end{example}
+\begin{example}\label[example]{ex:pullback-mon}
+  In $\Mon$, the category of monoids, the kernel of $f:M\to N$
+  can be represented as a pullback of the unique arrow $!:\braces{∗}\to N$ along
+  $f$ as in the following diagram:
+  \begin{center}
+      \begin{tikzcd}[sep=large]
+        \ker f \arrow[r, tail] \arrow[d, swap, "!"] & M \arrow[d, "f"] \\
+        \braces{∗} \arrow[r, swap, "!"] & N
+      \end{tikzcd}
+  \end{center}
+\end{example}
 
 \begin{example}\label[example]{ex:pushout-special-cases-top}
   In $\Top$, the wedge sum $A∨B$ is an instance of a pushout.
@@ -1158,6 +1184,8 @@ generalizes: any (co)limits are unique up to specified isomorphism.
     = A∨B
   \end{equation*}
 \end{example}
+
+\subsection{General construction}
 
 \Cref{def:terminal-and-initial}, \cref{def:product-and-coproduct},
 \cref{def:equalizer-and-coequalizer}, and \cref{def:pullback-and-pushout}
@@ -1372,12 +1400,18 @@ differences between co- and contravariant functors:
     \end{tikzcd}
   \end{minipage}
   \end{center}
-  In fact, these extend to a bifunctor (if $\bfC$ is locally small),
+  In fact, these extend to a \linktoo{def:bifunctor}{bifunctor} (if $\bfC$ is
+  locally small),
   \begin{align*}
     \Hom(-,-):C^{\op}\times C &\longrightarrow \Set \\
     (X,Y) &\longmapsto_0 \Hom(X,Y) \\
     (f,g) &\longmapsto_1 (g\circ -\circ f)
   \end{align*}
+\end{definition}
+
+\begin{definition}\label{def:presheaf}
+  A (set-valued) \define{presheaf}\index{Presheaf} on $\bfC$ is a functor
+  $\bfC^{\op}\to\Set$ \cite{nlab:presheaf}.
 \end{definition}
 
 For objects $W,X,Y,Z$ and morphisms $f:X\to Y$ and $g:Y\to Z$, post-composition
@@ -1389,6 +1423,19 @@ by $g$ and pre-composition by $f$ define natural transformations:
     \Hom(W,Y) \arrow[r,"g\circ -"] & \Hom(W,Z)
   \end{tikzcd}
 \end{center}
+
+\begin{definition}
+  A \define{representation} of a functor $F$ with domain $\bfC$ is an object
+  $c\in\bfC$ together with a natural isomorphism between $F$ and the represented
+  functor of the appropriate variance.
+\end{definition}
+
+\subsection{Closure of $\Cat$}
+
+The background to fully understand this topic is in
+\cref{sec:monoidal-categories}. 
+
+\subsection{The Yoneda embedding}
 
 \section{Functor algebras}
 \label{sec:functors-and-their-algebras}
@@ -1426,7 +1473,7 @@ algebraic structures like groups is a bit more complex.
 
 \begin{remark}\label[remark]{rmk:universal-algebra}
   By the universal property of coproducts, an algebra for a functor of the form
-  $A↦(A\times A)+A+1$ consists of:
+  $A\mapsto (A\times A)+A+1$ consists of:
   \begin{itemize}
     \itemsep0em
     \item an arrow $A\times A\to A$ (a binary operation on $A$),
@@ -1456,11 +1503,11 @@ for coalgebras or algebras, it holds dually for the other.
 
 \begin{definition}\label[definition]{def:coalgebra-morphism}
   A \define{coalgebra morphism}\index{(Co)algebra morphism} from
-  $(A,α)$ to $(B,β)$ is an arrow $f:A\to B$ such that the following
+  $(A,\alpha)$ to $(B,\beta)$ is an arrow $f:A\to B$ such that the following
   diagram commutes:
   \begin{center}
     \begin{tikzcd}
-      A  \arrow[d, "α"] \arrow[r, "f"] & B \arrow[d, "β"] \\
+      A  \arrow[d, "\alpha"] \arrow[r, "f"] & B \arrow[d, "\beta"] \\
       FA \arrow[r, "Ff"] & FB
     \end{tikzcd}
   \end{center}
@@ -1482,9 +1529,6 @@ category, called $F\Coalg$.
   }
 \end{definition}
 
-The following example is crucial to
-\cref{chap:coinductive-types-in-univalent-type-theory}.
-
 \begin{example}\label[example]{ex:nat}
   Let $\bfC$ be a category with distinguished binary coproducts and a terminal
   object $1$. Consider the functor
@@ -1494,31 +1538,30 @@ The following example is crucial to
     f &\longmapsto_1 \id_1+f
   \end{align*}
   where $1$ is a terminal object\index{Terminal object} and $+$ is the coproduct
-  bifunctor as in \cref{ex:coproduct-functoriality}. Let's examine
-  what it \textit{means} for some $F$-algebra $(N,η)$ to be initial. By
-  composing with the coproduct\index{Coproduct!In category theory} injections,
-  define
+  \linkto{def:bifunctor}{bifunctor} as in \cref{ex:coproduct-functoriality}.
+  Let's examine what it \textit{means} for some $F$-algebra $(N,\eta)$ to be
+  initial. By composing with the coproduct\index{Coproduct} injections, define
   \begin{align*}
     \begin{split}
       z &: 1 \longrightarrow N \\
-      z &= η\circ i_1
+      z &= \eta\circ i_1
     \end{split}
     \begin{split}
       s &: N \longrightarrow N \\
-      s &= η\circ i_2
+      s &= \eta\circ i_2
     \end{split}
   \end{align*}
   so that $η=[z,s]$:
   \begin{center}
     \begin{tikzcd}[sep=large,ampersand replacement=\&]
       1 \arrow[r, "i_1"{name=I1}]\arrow[dr, swap, "z"{name=F}]
-      \& 1+N \arrow[d,"η"]
+      \& 1+N \arrow[d,"\eta"]
       \& N\arrow[l, "i_2"{name=I2},swap]\arrow[dl,"s"{name=G}] \\
       {} \& N \& {}
     \end{tikzcd}
   \end{center}
-  Suppose $(A,α)$ is another $F$-algebra, and define $f,g$ by
-  composition as above so that $α=[f,g]$. By initiality of $(N,η)$,
+  Suppose $(A,\alpha)$ is another $F$-algebra, and define $f,g$ by
+  composition as above so that $\alpha=[f,g]$. By initiality of $(N,\eta)$,
   there is a unique arrow $u$ making the following diagram commute:
   \newcommand{\eeeeeta}{[z,s]}
   \newcommand{\aaaaalpha}{[f,g]}
@@ -1873,6 +1916,120 @@ property of the product.
   \end{center}
   Then the outer rectangle is a pullback square if TODO
 \end{lemma}
+
+\section{Monoidal categories}
+\label{sec:monoidal-categories}
+
+\begin{definition}\label{def:monoidal-category}
+	A \define{monoidal category} consists of a category $\bfC$ together with
+  \begin{itemize}
+    \itemsep-0.2em
+    \item a bifunctor (\cref{def:bifunctor}) $\bfC\times \bfC\to \bfC$ called the
+      \define{tensor product} or \define{monoidal product},
+    \item an object $I\in\Obj\bfC$ called the \define{unit},
+    \item for all objects $A,B,C\in\Obj\bfC$, an isomorphism
+      $\alpha_{A,B,C}:(A\otimes B)\otimes C\cong A\otimes (B\otimes C)$
+      called the \define{associator}, and
+    \item for all objects $A\in\Obj\bfC$, isomorphisms
+      $\lambda_A:I\otimes A\cong A$ and $\rho_A:A\otimes I\cong A$, called
+      the \define{left unitor} and \define{right unitor}, respectively.
+  \end{itemize}
+  These isomorphisms are subject to additional ``coherence conditions'', which
+  won't play a crucial role here. A monoidal category is
+  \begin{itemize}
+    \itemsep-0.2em
+    \item \define{symmetric} if there are additional isomorphisms
+      $s_{A,B}:A\otimes B\to B\otimes A$ satisfying other coherence conditions; and is
+    \item \define{cartesian} if the monoidal product $\otimes $ coincides with the
+      categorical product $\times $.
+  \end{itemize}
+\end{definition}
+
+\begin{remark}
+	For any categorical product there is a specified isomorphism
+  $A\times B\cong B\times A$, so any cartesian monoidal category is also
+  symmetric monoidal.
+\end{remark}
+
+\begin{example}
+  \
+  \begin{itemize}
+    \itemsep-0.2em
+    \item \vspace{-0.3em} $\Set$, $\universe$, $\Cat$, $\Grp$, and others are 
+      cartesian (so necessarily symmetric) monoidal under their categorical
+      products. 
+    \item $F\dVect$ is symmetric monoidal under $\otimes $; the trivial vector
+      space is a unit.
+  \end{itemize}
+\end{example}
+
+\begin{definition}\label[definition]{def:exponentials}
+  An \define{internal hom} for a monoidal category $(\bfC,\otimes)$
+  consists of
+  \begin{itemize}
+    \item for each pair of objects $A,B\in\Obj\bfC$, an object
+      $A\Rightarrow B$, and
+    \item an arrow $\eval:(A\Rightarrow B)\times A\to B$
+  \end{itemize}
+  satisfying the following universal property: for any object $C\in\Obj\bfC$ and
+  arrow $f:C\otimes A\to B$, there is an arrow
+  $\lambda f:C\to (A\Rightarrow B)$ making the following diagram commute:
+  \begin{center}
+    \begin{tikzcd}[sep=large]
+      C\times A \arrow[dr, "f"] \arrow[d, swap, "λf\times \id_A"] & {} \\
+      (A\Rightarrow B)\times A \arrow[r, swap, "\eval"]      & B
+    \end{tikzcd}
+  \end{center}
+  When $\bfC$ is cartesian, $A\Rightarrow B$ is called an \define{exponential},
+  and is denoted $B^A$.
+\end{definition}
+
+\begin{definition}
+  A monoidal category $(\bfC,\otimes )$ is \define{closed} when it has internal
+  homs.
+\end{definition}
+
+\begin{remark}
+  (Compare to \cref{rmk:prod-coprod-universal-adj})
+  In a closed monoidal category, for all $A,B,C\in\Obj\bfC$,
+  $\lambda$ and $\eval$ define a bijection
+  \begin{equation*}
+    \Hom(A\otimes B,C)\cong \Hom(A,B\Rightarrow C).
+  \end{equation*}
+  This bijection can be taken as their definition
+  with an additional ``naturalality'' condition.
+  This bijection is often called \define{currying}.
+\end{remark}
+
+\begin{example*}
+  $\Set$ and $\universe$ are closed monoidal.
+  Define $B\Rightarrow A\coloneqq \Hom(B,A)$.
+  Then this is an element of $\Set$/$\universe$. Mixing set- and type-theoretical
+  notation, the bijection is given by the mutually inverse functions
+  \begin{align*}
+    \Hom(A\times B,C) &\longrightarrow \Hom(A,\Hom(B,C)) \\
+    f &\longmapsto \λ{a}{\λ{b}{\appply{f}{a}{b}}} \\
+    \Hom(A,\Hom(B,C)) &\longrightarrow \Hom(A\times B,C) \\
+    g &\longmapsto \lam{p}{\appply{g}{(\appr{1}{a})}{(\appr{2}{b})}}
+  \end{align*}
+\end{example*}
+
+\begin{definition}\label[definition]{def:cartesian-cat}
+  A category is \define{Cartesian closed}
+  when it is closed, cartesian monoidal, and has a terminal object.
+  Equivalently, it is cartesian closed when it has
+  \begin{itemize}
+    \itemsep-0.2em
+    \item \vspace{-0.1em} \linkto{def:terminal-and-initial}{a terminal object},
+    \item binary products (\cref{def:product-and-coproduct}), and
+    \item exponentials (\cref{def:exponentials}).
+  \end{itemize}
+  ``CCC'' abbreviates ``Cartesian closed category''.
+\end{definition}
+
+\subsection{Symmetry}
+
+\subsection{Closure}
 
 \nocite{*}
 \bibliographystyle{apalike}
